@@ -2,6 +2,7 @@ package model;
 
 import java.util.Objects;
 
+// Represents an Item that will be shared between worker threads.
 public class Item {
     private int id;
     private String name;
@@ -69,6 +70,8 @@ public class Item {
         this.tax = tax;
     }
 
+    // Compares the current Item with the previous snapshot.
+    // Returns true when the Item is new or any relevant field has changed.
     public boolean hasChanged(Item other) {
         if (other == null) {
             return true;
