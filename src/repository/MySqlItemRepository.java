@@ -19,7 +19,7 @@ public class MySqlItemRepository implements ItemRepository {
     public List<ItemEntity> findAll() {
         List<ItemEntity> items = new ArrayList<>();
 
-        String query = "SELECT name,price,quantity,type,created_at,updated_at FROM items";
+        String query = "SELECT * FROM items";
 
         try (
                 Connection connection = DatabaseConnection.getConnection();
