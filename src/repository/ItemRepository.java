@@ -1,9 +1,9 @@
 package repository;
 
-import model.ItemRecord;
+import model.ItemEntity;
 
 import java.util.List;
 
 public interface ItemRepository {
-    List<ItemRecord> findAll();
+    List<ItemEntity> findAll();
 }
