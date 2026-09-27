@@ -16,7 +16,11 @@ public class ItemTaxThread extends Thread {
 
     @Override
     public void run() {
+        int cnt=0;
         while (context.isThread1Running() || hasChangedItems()) {
+            System.out.println(
+                    "Thread 2: Attempt " + (cnt + 1)
+            );
             List<Items> tempItems = null;
 
             synchronized (context.getChangedItems()) {
@@ -39,6 +43,7 @@ public class ItemTaxThread extends Thread {
                     return;
                 }
             }
+            cnt++;
         }
     }
 

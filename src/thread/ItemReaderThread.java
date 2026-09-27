@@ -1,10 +1,12 @@
 package thread;
+
 import enums.Type;
 import item.Items;
 import mapper.ItemMapper;
 import model.ItemEntity;
 import repository.ItemRepository;
 import validation.ValidateItem;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,10 @@ public class ItemReaderThread extends Thread {
         try {
             while (retryCount < 10) {
                 try {
+                    System.out.println(
+                            "Thread 1: Attempt " + (retryCount + 1) + " - Retrieving items"
+                    );
+
                     List<ItemEntity> entities = itemRepository.findAll();
                     List<Items> currentItems = new ArrayList<>();
 
@@ -40,18 +46,24 @@ public class ItemReaderThread extends Thread {
                         currentItems.add(itemMapper.map(entity));
                     }
 
-                    List<Items> changedItems = findChangedItems(previousItems,currentItems);
+                    List<Items> changedItems =
+                            findChangedItems(previousItems,currentItems);
 
-                    if (changedItems.toArray().length>0){
-                        retryCount=0;
-                    }
                     validateItems(changedItems);
 
                     synchronized (context.getChangedItems()) {
                         context.getChangedItems().addAll(changedItems);
                     }
 
-                    return;
+                    previousItems.clear();
+                    previousItems.addAll(currentItems);
+
+                    if (!changedItems.isEmpty()) {
+                        retryCount = 0;
+                    } else {
+                        retryCount++;
+                    }
+
                 } catch (Exception e) {
                     retryCount++;
 
@@ -109,15 +121,21 @@ public class ItemReaderThread extends Thread {
 
     private void validateItems(List<Items> changedItems) {
         HashMap<String,ArrayList<Type>> itemMapWithType = new HashMap<>();
-
         ValidateItem validator = new ValidateItem();
 
-        for (Items item : changedItems) {
-            validator.validateItem(item,itemMapWithType);
+        changedItems.removeIf(item -> {
+            try {
+                validator.validateItem(item,itemMapWithType);
 
-            itemMapWithType
-                    .computeIfAbsent(item.getName(),key -> new ArrayList<>())
-                    .add(item.getType());
-        }
+                itemMapWithType
+                        .computeIfAbsent(item.getName(),key -> new ArrayList<>())
+                        .add(item.getType());
+
+                return false;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return true;
+            }
+        });
     }
 }

@@ -29,8 +29,26 @@ public class CustomItemData {
         car.setCreatedAt(now);
         car.setUpdatedAt(now);
 
+        ItemEntity rice2 = new ItemEntity();
+        rice2.setName("Rice");
+        rice2.setPrice(22);
+        rice2.setQuantity(1000);
+        rice2.setType(Type.Raw);
+        rice2.setCreatedAt(now);
+        rice2.setUpdatedAt(now);
+
+        ItemEntity car2 = new ItemEntity();
+        car2.setName("Car");
+        car2.setPrice(3542);
+        car2.setQuantity(33);
+        car2.setType(Type.Manufactured);
+        car2.setCreatedAt(now);
+        car2.setUpdatedAt(now);
+
         items.add(rice);
         items.add(car);
+        items.add(rice2);
+        items.add(car2);
 
         return items;
     }

@@ -5,7 +5,7 @@ import repository.ItemRepository;
 import repository.MySqlItemRepository;
 
 public class RepositoryConfig {
-    private static final boolean USE_CUSTOM_DATA = true;
+    private static final boolean USE_CUSTOM_DATA = false;
 
     public static ItemRepository getItemRepository() {
         if (USE_CUSTOM_DATA) {
