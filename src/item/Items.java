@@ -3,10 +3,10 @@ package item;
 import enums.Type;
 
 public class Items {
-    private String name;
-    private double price;
-    private int quantity;
-    private Type type;
+    private final String name;
+    private final double price;
+    private final int quantity;
+    private final Type type;
 
     public Items(String name,double price,int quantity,Type type) {
         this.name = name;
